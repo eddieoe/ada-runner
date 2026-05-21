@@ -59,13 +59,13 @@ h2{font-size:1em;color:#555;letter-spacing:3px;margin-bottom:12px;font-family:'C
     </div>
   </div>
   <div id="tc">
-    <div class="tb" id="tUp"    style="left:100px;bottom:105px;width:64px;height:64px">W</div>
-    <div class="tb" id="tLeft"  style="left:28px;bottom:38px;width:64px;height:64px">A</div>
-    <div class="tb" id="tDown"  style="left:100px;bottom:38px;width:64px;height:64px">S</div>
-    <div class="tb" id="tRight" style="left:172px;bottom:38px;width:64px;height:64px">D</div>
-    <div class="tb" id="tFire"  style="right:28px;bottom:38px;width:80px;height:64px">FIRE</div>
-    <div class="tb" id="tFly"   style="right:120px;bottom:38px;width:80px;height:64px">JUMP</div>
-    <div class="tb" id="tFire2" style="right:120px;bottom:38px;width:80px;height:64px;display:none">FIRE</div>
+    <div class="tb" id="tUp"    style="left:100px;bottom:160px;width:60px;height:60px">W</div>
+    <div class="tb" id="tLeft"  style="left:28px;bottom:90px;width:60px;height:60px">A</div>
+    <div class="tb" id="tDown"  style="left:100px;bottom:90px;width:60px;height:60px">S</div>
+    <div class="tb" id="tRight" style="left:172px;bottom:90px;width:60px;height:60px">D</div>
+    <div class="tb" id="tFire"  style="right:28px;bottom:90px;width:75px;height:60px">FIRE</div>
+    <div class="tb" id="tFly"   style="right:115px;bottom:90px;width:75px;height:60px">JUMP</div>
+    <div class="tb" id="tFire2" style="right:115px;bottom:90px;width:75px;height:60px;display:none">FIRE</div>
   </div>
 </div>
 <script>
@@ -282,8 +282,12 @@ function update(dt){
     return;
   }
   score+=spd*dt/10;
-  diff=1+Math.floor(score/400)*.2;
-  spd=Math.min(280+score*.5,800);
+  // mobile gets gentler difficulty
+  var diffScale=isMobile?600:400;
+  var spdScale=isMobile?0.3:0.5;
+  var maxSpd=isMobile?550:800;
+  diff=1+Math.floor(score/diffScale)*.2;
+  spd=Math.min(280+score*spdScale,maxSpd);
   if(pl.inv>0)pl.inv-=dt;
   if(invincibleTimer>0)invincibleTimer-=dt;
   if(bleedTimer>0)bleedTimer-=dt;
@@ -300,16 +304,20 @@ function update(dt){
   if(spawnT<=0){
     if(pl.flying){
       var ad=1+Math.floor(score/150)*.3;
-      spawnT=Math.max(.22,1.4-ad*.12);
+      var minSpawn=isMobile?.4:.22;
+      var baseSpawn=isMobile?2.0:1.4;
+      spawnT=Math.max(minSpawn,baseSpawn-ad*.1);
       var r=Math.random();
       if(r<.32)obs.push({type:'drone',x:W+80,y:40+Math.random()*(GL-190),w:50,h:34,air:true,vy:(Math.random()-.5)*60*(1+ad*.2),vx:0});
       else if(r<.58)obs.push({type:'emissile',x:W+80,y:30+Math.random()*(GL-160),w:58,h:20,air:true,vy:(Math.random()-.5)*80,vx:0});
       else if(r<.82)obs.push({type:'heli',x:W+80,y:40+Math.random()*(GL-200),w:82,h:50,air:true,vy:(Math.random()-.5)*50,vx:0});
       else obs.push({type:'jet',x:W+120,y:60+Math.random()*(GL-240),w:90,h:44,air:true,vy:0,vx:0,shotFired:false,shotTimer:1.2+Math.random()*.8});
     } else {
-      spawnT=Math.max(.55,2.2-diff*.18);
+      var minGSpawn=isMobile?.8:.55;
+      var baseGSpawn=isMobile?3.0:2.2;
+      spawnT=Math.max(minGSpawn,baseGSpawn-diff*.18);
       var rg=Math.random();
-      var sc=diff>2?Math.floor(1+Math.random()*3):1;
+      var sc=diff>2?Math.floor(1+Math.random()*(isMobile?2:3)):1;
       if(rg<.28){for(var si=0;si<sc;si++)obs.push({type:'soldier',x:W+80+si*28,y:GL-44,w:22,h:44,air:false,vy:0,vx:0,fireTimer:.5+Math.random()*1.5,firing:false});}
       else if(rg<.48)obs.push({type:'gmissile',x:W+80,y:GL-50,w:34,h:50,air:false,vy:0,vx:0});
       else if(rg<.65)obs.push({type:'jeep',x:W+80,y:GL-32,w:60,h:32,air:false,vy:0,vx:0});
