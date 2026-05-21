@@ -65,6 +65,7 @@ h2{font-size:1em;color:#555;letter-spacing:3px;margin-bottom:12px;font-family:'C
     <div class="tb" id="tRight" style="left:172px;bottom:38px;width:64px;height:64px">D</div>
     <div class="tb" id="tFire"  style="right:28px;bottom:38px;width:80px;height:64px">FIRE</div>
     <div class="tb" id="tFly"   style="right:120px;bottom:38px;width:80px;height:64px">JUMP</div>
+    <div class="tb" id="tFire2" style="right:120px;bottom:38px;width:80px;height:64px;display:none">FIRE</div>
   </div>
 </div>
 <script>
@@ -109,18 +110,23 @@ bindTouch('tDown', function(){keys.down=true;},  function(){keys.down=false;});
 bindTouch('tLeft', function(){keys.left=true;},  function(){keys.left=false;});
 bindTouch('tRight',function(){keys.right=true;}, function(){keys.right=false;});
 bindTouch('tFire', function(){if(state==='playing')fireShot();},null);
+bindTouch('tFire2',function(){if(state==='playing')fireShot();},null);
 bindTouch('tFly',  function(){if(state==='playing')onJump();}, null);
 
 // show/hide wasd in air
 function updateTouchUI(){
   if(!pl)return;
-  var show=pl.flying;
+  var flying=pl.flying;
   ['tUp','tDown','tLeft','tRight'].forEach(function(id){
     var el=document.getElementById(id);
-    if(el)el.style.display=show?'flex':'none';
+    if(el)el.style.display=flying?'flex':'none';
   });
-  var fb=document.getElementById('tFly');
-  if(fb)fb.textContent=pl.flying?'LAND':'JUMP';
+  // ground: show JUMP left + FIRE right
+  // air: show WASD + FIRE in both spots (no land button)
+  var tFly=document.getElementById('tFly');
+  var tFire2=document.getElementById('tFire2');
+  if(tFly)tFly.style.display=flying?'none':'flex';
+  if(tFire2)tFire2.style.display=flying?'flex':'none';
 }
 
 // show touch controls only during gameplay
