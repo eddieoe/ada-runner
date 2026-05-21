@@ -408,11 +408,26 @@ function update(dt){
 // ── DRAW ──────────────────────────────────────────────────────
 function drawScene(){
   cx.fillStyle='#f7f7f7';cx.fillRect(0,0,W,H);
+  // clouds — spread across full width
   cx.fillStyle='#e8e8e8';
-  for(var i=0;i<6;i++){var bx=(i*220+score*.25)%W,by=35+i*18;cx.beginPath();cx.ellipse(bx,by,44,15,0,0,Math.PI*2);cx.fill();cx.beginPath();cx.ellipse(bx+32,by+5,30,11,0,0,Math.PI*2);cx.fill();}
+  for(var i=0;i<8;i++){
+    var bx=(i*(W/7)+score*.25)%W;
+    var by=30+i*15;
+    cx.beginPath();cx.ellipse(bx,by,W*.05,15,0,0,Math.PI*2);cx.fill();
+    cx.beginPath();cx.ellipse(bx+W*.04,by+5,W*.035,11,0,0,Math.PI*2);cx.fill();
+  }
+  // ground line
   cx.fillStyle='#222';cx.fillRect(0,GL,W,3);
-  cx.fillStyle='#ccc';for(var j=0;j<25;j++)cx.fillRect((j*91+score*.65)%W,GL+5,4,2);
-  cx.fillStyle='#e0e0e0';for(var k=0;k<7;k++){var mx=(k*155+score*.07)%W;cx.beginPath();cx.moveTo(mx,GL);cx.lineTo(mx+38,GL-55-k*7);cx.lineTo(mx+76,GL);cx.fill();}
+  // ground dots
+  cx.fillStyle='#ccc';
+  for(var j=0;j<40;j++){cx.fillRect((j*(W/38)+score*.65)%W,GL+5,4,2);}
+  // mountains — spread across full width
+  cx.fillStyle='#e0e0e0';
+  for(var k=0;k<10;k++){
+    var mx=(k*(W/9)+score*.07)%W;
+    var mh=55+k*7;
+    cx.beginPath();cx.moveTo(mx,GL);cx.lineTo(mx+W*.04,GL-mh);cx.lineTo(mx+W*.08,GL);cx.fill();
+  }
 }
 
 function drawAvenger(w,h){
