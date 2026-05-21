@@ -10,7 +10,9 @@ html,body{width:100%;height:100%;overflow:hidden;}
 body{background:#f7f7f7;font-family:'Courier New',monospace;color:#333;}
 canvas{display:block;position:absolute;top:0;left:0;}
 #ui{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;}
-.screen{pointer-events:all;}
+.screen{pointer-events:all;z-index:10;}
+#hud{pointer-events:none;z-index:5;}
+#touchControls{pointer-events:none;z-index:15;}
 .screen{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(247,247,247,0.95);pointer-events:all;}
 .screen.hidden{display:none;}
 .screen h1{font-size:2.6em;color:#222;letter-spacing:8px;margin-bottom:8px;}
@@ -138,8 +140,11 @@ if(isMobile){
 
 // ── SCREENS ───────────────────────────────────────────────────
 document.getElementById('deployBtn').addEventListener('click',startGame);
+document.getElementById('deployBtn').addEventListener('touchend',function(e){e.preventDefault();startGame();});
 document.getElementById('retryBtn').addEventListener('click',startGame);
+document.getElementById('retryBtn').addEventListener('touchend',function(e){e.preventDefault();startGame();});
 document.getElementById('menuBtn').addEventListener('click',showMenu);
+document.getElementById('menuBtn').addEventListener('touchend',function(e){e.preventDefault();showMenu();});
 
 function showMenu(){
   state='menu';
