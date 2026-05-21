@@ -128,6 +128,12 @@ function bindTouch(id,dn,up){
   el.addEventListener('touchend',function(e){e.stopPropagation();e.preventDefault();if(up)up();},{passive:false});
   el.addEventListener('touchcancel',function(e){e.stopPropagation();e.preventDefault();if(up)up();},{passive:false});
 }
+// touch jump on the game area div, not canvas
+var gameArea=document.createElement('div');
+gameArea.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;';
+gameArea.id='gameArea';
+document.body.appendChild(gameArea);
+
 if(isMobile){
   document.getElementById('touchControls').style.pointerEvents='all';
   bindTouch('tUp',   function(){keys.up=true;},   function(){keys.up=false;});
