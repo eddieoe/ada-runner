@@ -146,11 +146,11 @@ if(isMobile){
 
 // ── SCREENS ───────────────────────────────────────────────────
 document.getElementById('deployBtn').addEventListener('click',startGame);
-document.getElementById('deployBtn').addEventListener('touchend',function(e){e.preventDefault();startGame();});
+document.getElementById('deployBtn').addEventListener('touchstart',function(e){e.stopPropagation();e.preventDefault();startGame();},{passive:false});
 document.getElementById('retryBtn').addEventListener('click',startGame);
-document.getElementById('retryBtn').addEventListener('touchend',function(e){e.preventDefault();startGame();});
+document.getElementById('retryBtn').addEventListener('touchstart',function(e){e.stopPropagation();e.preventDefault();startGame();},{passive:false});
 document.getElementById('menuBtn').addEventListener('click',showMenu);
-document.getElementById('menuBtn').addEventListener('touchend',function(e){e.preventDefault();showMenu();});
+document.getElementById('menuBtn').addEventListener('touchstart',function(e){e.stopPropagation();e.preventDefault();showMenu();},{passive:false});
 
 function showMenu(){
   state='menu';
